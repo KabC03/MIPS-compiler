@@ -131,7 +131,6 @@ def run(sourceFile):
 
 
                 elif tokens[0] == "var" and len(tokens) >= 3:
-
                     #var x = 10 + ...
                     destination = tokens[1]
                     prevOp = "+"
@@ -153,7 +152,7 @@ def run(sourceFile):
                             tokens[token] = tokens[token].split("[")
 
                             if tokens[token][0] in varDict and varDict[tokens[token][0]] == "array":
-                                #notes - can only use ONE variable, cant load immediate offset
+                                #notes - can only use ONE variable, cant load immediate offset, must multiply address yourself (x * 4)
                                 arrIndex = tokens[token][1][0:-1]
                                 
                                 if arrIndex in varDict:
@@ -242,7 +241,37 @@ def run(sourceFile):
                     pass
 
 
-                elif tokens[0] == "return" and len(tokens) >= 3:
+                elif tokens[0] == "return" and (len(tokens) == 3 or len(tokens) == 2):
+                    #return value value1
+                    #Specify 0 in second field if no second return argument
+                    #First into $v0 and second into $v1, effectively a move command
+                    #Also pops off used registers
+
+
+                    #Resotre registers
+
+
+
+                    #Move return vals
+                    if len(tokens) == 2:
+                        if tokens[1] in varDict:
+                                destFile.write("\taddi $v0 $0 $"+ str(tokens[1]) + "\n")
+                        else:
+                            print("Variable is not defined: " + str(tokens[1]))
+
+                    if len(tokens) == 3:
+                        if tokens[1] in varDict or tokens[2] in varDict:
+                                
+                                destFile.write("\taddi $v0 $0 $"+ str(tokens[1]) + "\n")
+                                destFile.write("\taddi $v1 $0 $"+ str(tokens[1]) + "\n")
+                        else:
+                            print("Variable is not defined: " + str(tokens))
+
+                    
+                    else:
+                        print("Variable is not defined: " + str(tokens))
+
+
                     pass
 
 
