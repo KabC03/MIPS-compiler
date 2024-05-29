@@ -367,6 +367,7 @@ def run(sourceFile):
 
     if labelStack != []:
         print("Missing end statement\n")
+        return None
 
 
     return 1
