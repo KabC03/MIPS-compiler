@@ -20,8 +20,7 @@ def run(sourceFile):
     varDict = {} #contains var:type
     regDict = {} #contains var:reg
     labelStack = [] #Label stack is if_n (n is a number)
-    functionStack = []
-    functionDepth = 0
+    knownFunctions = {}
     labCount = 0 #Label counter (n)
     destFileName = "output.asm"
     declareVars = True
@@ -241,6 +240,22 @@ def run(sourceFile):
 
                 elif tokens[0] == "call" and len(tokens) >= 3:
                     #call a b c
+                    #ONLY TAKES REGISTER ARGUMENTS
+                    if tokens[1] in knownFunctions:
+                        
+                        for argument in range(2,len(tokens)):
+                            if tokens[argument] in regDict: #move to $a0 to $a3
+                                destFile.write("\taddi $" + str(4 + argument - 2) + " $0 " + str(regDict[tokens[argument]]) + "\n")
+                            else:
+                                print("Unknown parameter: " + str(tokens[argument]))
+
+
+                        destFile.write("\tjal $" + str(knownFunctions[tokens[1]]) + "\n") #Jump to label
+                    
+
+                    else:
+                        print("Unknown function: " + str(tokens[1]))
+
                     pass
 
 
@@ -249,6 +264,9 @@ def run(sourceFile):
                     #func a b c
                     #types of a b and c are defined before program already
                     pass
+
+
+
 
 
 
@@ -262,6 +280,15 @@ def run(sourceFile):
 
                     #Resotre registers
                     #COME BACK
+
+
+                    counterReg = 0
+                    for reg in allowedReg:
+
+                        destFile.write("\taddi $" + str(reg) + " $0 " + str(counterReg) +"($sp)\n")
+                        counterReg += wordSize
+
+                    destFile.write("\taddi $sp $0 " + str(len(allowedReg) * wordSize) + "\n")
 
 
                     #Move return vals
