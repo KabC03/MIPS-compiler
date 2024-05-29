@@ -397,7 +397,7 @@ def run(sourceFile):
 
 def main():
     startTime = time.time()
-    #sourceFileName = input("Source file: ")
+    sourceFileName = input("Source file: ")
     sourceFileName = "source.txt"
 
     #with open(sourceFileName, 'r') as sourceFile:
