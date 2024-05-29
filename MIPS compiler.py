@@ -404,17 +404,18 @@ def main():
     #    if run(sourceFile) == None:
     #        print("Failed compilation")
 
-    #try:
+    try:
 
-    #    with open(sourceFileName, 'r') as sourceFile:
-    #        if run(sourceFile) == None:
-    #            print("Failed compilation")
+        with open(sourceFileName, 'r') as sourceFile:
+            if run(sourceFile) == None:
+                print("Failed compilation")
 
-    #except:
-    #    print("Failed to open source file: " + str(sourceFileName))   
+    except:
+        print("Failed to open source file: " + str(sourceFileName))   
+
 
     stopTime = time.time()
-    print("Successfully compiled in: " + str((stopTime - startTime)) + "s\n") 
+    print("Successfully compiled in: " + str((stopTime - startTime)*1000) + "s\n") 
 
 
 
