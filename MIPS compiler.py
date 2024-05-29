@@ -115,22 +115,29 @@ def run(sourceFile):
                     #if x == y
                     #Note - load value into reg before use - can only compare vars not vals
 
-                    operator = tokens[2]
-                    labelStack.insert(0,"if_" + str(labCount))
+                    if tokens[1] in varDict and tokens[3] in varDict:
+                        operator = tokens[2]
+                        labelStack.insert(0,"if_" + str(labCount))
+                        if operator == "==":
+                            destFile.write("\tbne $" + str(varDict[tokens[1]]) + " " + str(varDict[tokens[3]]) + " if_" + str(labCount) + "\n")
+                        elif operator == "!=":
+                            destFile.write("\tbeq $" + str(varDict[tokens[1]]) + " " + str(varDict[tokens[3]]) + " if_" + str(labCount) + "\n")
+                        elif operator == ">":
+                            destFile.write("\tble $" + str(varDict[tokens[1]]) + " " + str(varDict[tokens[3]]) + " if_" + str(labCount) + "\n")
+                        elif operator == ">=":
+                            destFile.write("\tblt $" + str(varDict[tokens[1]]) + " " + str(varDict[tokens[3]]) + " if_" + str(labCount) + "\n")
+                        elif operator == "<":
+                            destFile.write("\tbge $" + str(varDict[tokens[1]]) + " " + str(varDict[tokens[3]]) + " if_" + str(labCount) + "\n")
+                        elif operator == "<=":
+                            destFile.write("\tbgt $" + str(varDict[tokens[1]]) + " " + str(varDict[tokens[3]]) + " if_" + str(labCount) + "\n")
+                        labCount += 1
+                    else:
+                        print("Unknown variable: " + str(tokens))
 
-                    if operator == "==":
-                        destFile.write("\tbne $" + str(tokens[1]) + " " + str(tokens[3]) + " if_" + str(labCount) + "\n")
-                    elif operator == "!=":
-                        destFile.write("\tbeq $" + str(tokens[1]) + " " + str(tokens[3]) + " if_" + str(labCount) + "\n")
-                    elif operator == ">":
-                        destFile.write("\tble $" + str(tokens[1]) + " " + str(tokens[3]) + " if_" + str(labCount) + "\n")
-                    elif operator == ">=":
-                        destFile.write("\tblt $" + str(tokens[1]) + " " + str(tokens[3]) + " if_" + str(labCount) + "\n")
-                    elif operator == "<":
-                        destFile.write("\tbge $" + str(tokens[1]) + " " + str(tokens[3]) + " if_" + str(labCount) + "\n")
-                    elif operator == "<=":
-                        destFile.write("\tbgt $" + str(tokens[1]) + " " + str(tokens[3]) + " if_" + str(labCount) + "\n")
-                    labCount += 1
+
+
+
+
 
                 elif tokens[0] == "end" and len(tokens) == 1:
                     #end (end an if)
