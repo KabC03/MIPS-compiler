@@ -17,10 +17,30 @@ debug = False
 
 def run(sourceFile):
 
-    varDict = {} #contains var:type
-    regDict = {} #contains var:reg
+    varDict = {
+
+        "ARG1" : "int",
+        "ARG2" : "int",
+        "ARG3" : "array",
+        "ARG4" : "array"
+
+    } #contains var:type
+    #note - take 2 addresses and 2 variables by default
+
+    regDict = {
+
+        "ARG1" : "4",
+        "ARG2" : "5",
+        "ARG3" : "6",
+        "ARG4" : "7"
+
+    } #contains var:reg (v registers)
+
+
+
+
     labelStack = [] #Label stack is if_n (n is a number)
-    knownFunctions = {}
+    knownFunctions = {} #list of known functions
     labCount = 0 #Label counter (n)
     destFileName = "output.asm"
     declareVars = True
@@ -260,25 +280,21 @@ def run(sourceFile):
 
 
 
-                elif tokens[0] == "func" and len(tokens) >= 3:
-                    #func a b c
-                    #types of a b and c are defined before program already (have same type but different value)
+                elif tokens[0] == "func" and len(tokens) == 2:
+                    #func label
+                    #By default ARG1-4 MUST be used inside a function
+                    #ARG1 and 2 are ints rest are arrays
 
                     knownFunctions[tokens[1]] = tokens[1]
 
                     counterReg = 0
+                    destFile.write("\tfunc_" + str(tokens[0]) + ":\n") #Function label
                     for reg in allowedReg:
 
                         destFile.write("\taddi $" + str(reg) + " $0 " + str(counterReg) +"($sp)\n")
                         counterReg -= wordSize
 
                     destFile.write("\taddi $sp $0 " + str(len(allowedReg) * wordSize) + "\n")
-
-
-
-
-
-
 
 
 
