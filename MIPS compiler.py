@@ -1,11 +1,14 @@
 
 
 
-reservedWords = ["int", "arr", "var", "if", "end","jump", "label", "func", "return", "", "program"]
+reservedWords = ["int", "array", "var", "if", "end","jump", "label", "func", "return", "", "program"]
 reservedSymbols = ["+", "-", "*", "/", "%","=",">", ">=", "<", "<=", "!=", "[", "]"]
 allowedReg = list(range(4,18))
 ALUaccumulator = 25 #Register 25 holds accumulator vals
 ALUHold = 24 #For division and multuolication
+indexHold = 23 #array indexing
+wordSize = 4 #4 bytes
+
 
 debug = False
 
@@ -137,11 +140,50 @@ def run(sourceFile):
                         print("Unknown variable: " + str(tokens[1]))
                         return None
                     
-
+                    destFile.write("\tli $" + str(ALUaccumulator) + " 0" + "\n")
                     for token in range(3,len(tokens)):
-                        
                         if tokens[token] in reservedSymbols: #Symbol deteced
-                            prevOp = token
+                            prevOp = tokens[token]
+
+
+
+
+                        if tokens[token][-1] == "]": #Array
+
+                            tokens[token] = tokens[token].split("[")
+
+                            if tokens[token][0] in varDict and varDict[tokens[token][0]] == "array":
+                                #notes - can only use ONE variable, cant load immediate offset
+                                arrIndex = tokens[token][1][0:-1]
+                                
+                                if arrIndex in varDict:
+                                    #MEMORY ADDRESS
+                                    destFile.write("\tadd $" + str(indexHold) + " $"+ str(regDict[tokens[token][0]]) + " $"+ str(regDict[arrIndex]) + "\n")
+                                    destFile.write("\tlw $" + str(indexHold) + " 0($"+ str(indexHold) + ")\n")
+
+                                    if prevOp == "+":
+                                        destFile.write("\tadd $" + str(ALUaccumulator) + " $"+ str(ALUaccumulator) + " $"+ str(indexHold) + "\n")
+                                    elif prevOp == "-":
+                                        destFile.write("\tsub $" + str(ALUaccumulator) + " $"+ str(ALUaccumulator) + " $"+ str(indexHold) + "\n")
+                                    if prevOp == "*":
+                                        destFile.write("\tmul $" + str(ALUaccumulator) + " $"+ str(indexHold) + "\n")
+                                        destFile.write("\tmflo $" + str(ALUaccumulator) + "\n")
+                                    elif prevOp == "/":
+                                        destFile.write("\tdiv $" + str(ALUaccumulator) + " $"+ str(indexHold) + "\n")
+                                        destFile.write("\tmflo $" + str(ALUaccumulator) + "\n")
+
+                                    elif prevOp == "%":
+                                        destFile.write("\tdiv $" + str(ALUaccumulator) + " $"+ str(indexHold) + "\n")
+                                        destFile.write("\tmfhi $" + str(ALUaccumulator) + "\n")
+
+                                
+                                else:
+                                    print("Variable is not array: " + str(arrIndex))
+                            else:
+                                print("Variable is not array: " + str(tokens[token][0]))
+
+
+
 
                         elif tokens[token] in varDict:
 
@@ -161,47 +203,50 @@ def run(sourceFile):
                                 destFile.write("\tmfhi $" + str(ALUaccumulator) + "\n")
 
 
-
-
-
-
-
-
-
                         else: #Must be a number, check if actually a number first rhough
                             
+                            skip = False
                             for character in tokens[token]:
                                 if character.isalpha() == True:
                                     print("Unknown variable: " + str(tokens[token]))
                                     return None
-                                
+                                elif character in reservedSymbols:
+                                    skip = True
 
-                            if prevOp == "+":
-                                destFile.write("\taddi $" + str(ALUaccumulator) + " $"+ str(ALUaccumulator) + " "+ str(tokens[token]) + "\n")
-                            elif prevOp == "-":
-                                destFile.write("\tsubi $" + str(ALUaccumulator) + " $"+ str(ALUaccumulator) + " "+ str(tokens[token]) + "\n")
+                            if skip == False:
 
-                                
-                            if prevOp == "*":
-                                destFile.write("\tmul $" + str(ALUaccumulator) + " $"+ str(regDict[tokens[token]]) + "\n")
-                                destFile.write("\tmflo $" + str(ALUaccumulator) + "\n")
-                            elif prevOp == "/":
-                                destFile.write("\tdiv $" + str(ALUaccumulator) + " $"+ str(regDict[tokens[token]]) + "\n")
-                                destFile.write("\tmflo $" + str(ALUaccumulator) + "\n")
+                                if prevOp == "+":
+                                    destFile.write("\taddi $" + str(ALUaccumulator) + " $"+ str(ALUaccumulator) + " "+ str(tokens[token]) + "\n")
+                                elif prevOp == "-":
+                                    destFile.write("\tsubi $" + str(ALUaccumulator) + " $"+ str(ALUaccumulator) + " "+ str(tokens[token]) + "\n")
 
-                            elif prevOp == "%":
-                                destFile.write("\tdiv $" + str(ALUaccumulator) + " $"+ str(regDict[tokens[token]]) + "\n")
-                                destFile.write("\tmfhi $" + str(ALUaccumulator) + "\n")
+                                    
+                                if prevOp == "*":
+                                    destFile.write("\taddi $" + str(ALUHold) + " $0 " + str(tokens[token]) + "\n")
+                                    destFile.write("\tmul $" + str(ALUaccumulator) + " " + str(ALUaccumulator) + " $" + str(ALUHold) + "\n")
+                                    destFile.write("\tmflo $" + str(ALUaccumulator) + "\n")
+                                elif prevOp == "/":
+                                    destFile.write("\taddi $" + str(ALUHold) + " $0 " + str(tokens[token]) + "\n")
+                                    destFile.write("\tdiv $" + str(ALUaccumulator) + " $" + str(ALUaccumulator) + " $" + str(ALUHold) + "\n")
+                                    destFile.write("\tmflo $" + str(ALUaccumulator) + "\n")
 
-
-
-                            
-
-
-
-
-
+                                elif prevOp == "%":
+                                    destFile.write("\taddi $" + str(ALUHold) + " $0 " + str(tokens[token]) + "\n")
+                                    destFile.write("\tdiv $" + str(ALUaccumulator) + " $" + str(ALUaccumulator) + " $" + str(ALUHold) + "\n")
+                                    destFile.write("\tmfhi $" + str(ALUaccumulator) + "\n")
                     destFile.write("\n")
+
+
+
+                elif tokens[0] == "func" and len(tokens) >= 3:
+                    pass
+
+
+                elif tokens[0] == "return" and len(tokens) >= 3:
+                    pass
+
+
+
                         
 
                     
