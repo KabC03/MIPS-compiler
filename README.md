@@ -1,1 +1,1 @@
-A slow, horrible MIPS compiler written in python
+A slow, horrible BASIC to MIPS compiler written in python
