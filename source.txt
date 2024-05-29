@@ -14,9 +14,4 @@ if z >= lol
 
     var x = x + 1 + z
     jump start
-
-
-
-
-
-
+end
