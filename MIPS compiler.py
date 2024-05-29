@@ -96,7 +96,7 @@ def run(sourceFile):
                     regIndex = allowedReg[0]
                     for key in varDict:
                         
-                        if regIndex > allowedReg[-1]:
+                        if regIndex > allowedReg[-1] + 4: #add 4 to make sure ARGX is not counted, stored in V registers only
                             print("Out of registers")
                             return None
 
