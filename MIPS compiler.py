@@ -1,4 +1,4 @@
-
+import time
 
 
 reservedWords = ["int", "array", "var", "if", "end","jump", "label", "func", "return", "call", "", "program"]
@@ -396,12 +396,13 @@ def run(sourceFile):
 
 
 def main():
+    startTime = time.time()
     #sourceFileName = input("Source file: ")
     sourceFileName = "source.txt"
 
-    with open(sourceFileName, 'r') as sourceFile:
-        if run(sourceFile) == None:
-            print("Failed compilation")
+    #with open(sourceFileName, 'r') as sourceFile:
+    #    if run(sourceFile) == None:
+    #        print("Failed compilation")
 
     #try:
 
@@ -410,7 +411,10 @@ def main():
     #            print("Failed compilation")
 
     #except:
-    #    print("Failed to open source file: " + str(sourceFileName))            
+    #    print("Failed to open source file: " + str(sourceFileName))   
+
+    stopTime = time.time()
+    print("Successfully compiled in: " + str(stopTime - startTime) + "s\n") 
 
 
 
