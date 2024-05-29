@@ -414,7 +414,7 @@ def main():
     #    print("Failed to open source file: " + str(sourceFileName))   
 
     stopTime = time.time()
-    print("Successfully compiled in: " + str(stopTime - startTime) + "s\n") 
+    print("Successfully compiled in: " + str((stopTime - startTime)) + "s\n") 
 
 
 
