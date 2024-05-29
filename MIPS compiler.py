@@ -1,9 +1,9 @@
 
 
 
-reservedWords = ["int", "array", "var", "if", "end","jump", "label", "func", "return", "", "program"]
+reservedWords = ["int", "array", "var", "if", "end","jump", "label", "func", "return", "call", "", "program"]
 reservedSymbols = ["+", "-", "*", "/", "%","=",">", ">=", "<", "<=", "!=", "[", "]"]
-allowedReg = list(range(4,18))
+allowedReg = list(range(8,15))
 ALUaccumulator = 25 #Register 25 holds accumulator vals
 ALUHold = 24 #For division and multuolication
 indexHold = 23 #array indexing
@@ -20,6 +20,8 @@ def run(sourceFile):
     varDict = {} #contains var:type
     regDict = {} #contains var:reg
     labelStack = [] #Label stack is if_n (n is a number)
+    functionStack = []
+    functionDepth = 0
     labCount = 0 #Label counter (n)
     destFileName = "output.asm"
     declareVars = True
@@ -237,8 +239,18 @@ def run(sourceFile):
 
 
 
-                elif tokens[0] == "func" and len(tokens) >= 3:
+                elif tokens[0] == "call" and len(tokens) >= 3:
+                    #call a b c
                     pass
+
+
+
+                elif tokens[0] == "func" and len(tokens) >= 3:
+                    #func a b c
+                    #types of a b and c are defined before program already
+                    pass
+
+
 
 
                 elif tokens[0] == "return" and (len(tokens) == 3 or len(tokens) == 2):
@@ -249,21 +261,22 @@ def run(sourceFile):
 
 
                     #Resotre registers
-
+                    #COME BACK
 
 
                     #Move return vals
                     if len(tokens) == 2:
                         if tokens[1] in varDict:
-                                destFile.write("\taddi $v0 $0 $"+ str(tokens[1]) + "\n")
+                                destFile.write("\taddi $v0 $0 "+ str(tokens[1]) + "\n")
                         else:
                             print("Variable is not defined: " + str(tokens[1]))
+
 
                     if len(tokens) == 3:
                         if tokens[1] in varDict or tokens[2] in varDict:
                                 
-                                destFile.write("\taddi $v0 $0 $"+ str(tokens[1]) + "\n")
-                                destFile.write("\taddi $v1 $0 $"+ str(tokens[1]) + "\n")
+                                destFile.write("\taddi $v0 $0 "+ str(tokens[1]) + "\n")
+                                destFile.write("\taddi $v1 $0 "+ str(tokens[1]) + "\n")
                         else:
                             print("Variable is not defined: " + str(tokens))
 
