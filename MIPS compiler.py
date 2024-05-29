@@ -250,7 +250,7 @@ def run(sourceFile):
                                 print("Unknown parameter: " + str(tokens[argument]))
 
 
-                        destFile.write("\tjal $" + str(knownFunctions[tokens[1]]) + "\n") #Jump to label
+                        destFile.write("\tjal func_" + str(knownFunctions[tokens[1]]) + "\n") #Jump to label
                     
 
                     else:
@@ -262,8 +262,20 @@ def run(sourceFile):
 
                 elif tokens[0] == "func" and len(tokens) >= 3:
                     #func a b c
-                    #types of a b and c are defined before program already
-                    pass
+                    #types of a b and c are defined before program already (have same type but different value)
+
+                    knownFunctions[tokens[1]] = tokens[1]
+
+                    counterReg = 0
+                    for reg in allowedReg:
+
+                        destFile.write("\taddi $" + str(reg) + " $0 " + str(counterReg) +"($sp)\n")
+                        counterReg -= wordSize
+
+                    destFile.write("\taddi $sp $0 " + str(len(allowedReg) * wordSize) + "\n")
+
+
+
 
 
 
