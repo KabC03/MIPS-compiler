@@ -10,7 +10,7 @@ indexHold = 23 #array indexing
 wordSize = 4 #4 bytes
 
 
-debug = False
+debug = False #Enable for debug in the assembly output
 
 
 
