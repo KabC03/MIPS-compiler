@@ -14,7 +14,7 @@ def run(sourceFile):
 
     varDict = {} #contains var:type
     regDict = {} #contains var:reg
-    labelStack = [] #Label stack is LABn (n is a number)
+    labelStack = [] #Label stack is if_n (n is a number)
     labCount = 0 #Label counter (n)
     destFileName = "output.asm"
     declareVars = True
@@ -26,13 +26,15 @@ def run(sourceFile):
             tokens = []
             tokens = line.split() #Split by whitespace
 
-            destFile.write("\n")
-            if debug == True:
-                destFile.write("\t\t# " + str(tokens) + "\n")
 
 
             if len(tokens) == 0:
                 continue
+
+            destFile.write("\n")
+            if debug == True:
+                destFile.write("\t\t# " + str(tokens) + "\n")
+
 
             if tokens[0] == "int" and len(tokens) == 4: #int assignment
                 varDict[str(tokens[1])] = "int"
@@ -76,26 +78,35 @@ def run(sourceFile):
                     #Note - load value into reg before use - can only compare vars not vals
 
                     operator = tokens[2]
-                    labelStack.insert(0,"LAB" + str(labCount))
-                    labCount += 1
-                    if operator == "==":
-                        destFile.write("\tbne $" + str(tokens[1]) + " " + str(tokens[3]) + "LAB" + str(labCount) + "\n")
-                    elif operator == "!=":
-                        destFile.write("\tbeq $" + str(tokens[1]) + " " + str(tokens[3]) + "LAB" + str(labCount) + "\n")
-                    elif operator == ">":
-                        destFile.write("\tble $" + str(tokens[1]) + " " + str(tokens[3]) + "LAB" + str(labCount) + "\n")
-                    elif operator == ">=":
-                        destFile.write("\tblt $" + str(tokens[1]) + " " + str(tokens[3]) + "LAB" + str(labCount) + "\n")
-                    elif operator == "<":
-                        destFile.write("\tbge $" + str(tokens[1]) + " " + str(tokens[3]) + "LAB" + str(labCount) + "\n")
-                    elif operator == "<=":
-                        destFile.write("\tbgt $" + str(tokens[1]) + " " + str(tokens[3]) + "LAB" + str(labCount) + "\n")
+                    labelStack.insert(0,"if_" + str(labCount))
 
+                    if operator == "==":
+                        destFile.write("\tbne $" + str(tokens[1]) + " " + str(tokens[3]) + " if_" + str(labCount) + "\n")
+                    elif operator == "!=":
+                        destFile.write("\tbeq $" + str(tokens[1]) + " " + str(tokens[3]) + " if_" + str(labCount) + "\n")
+                    elif operator == ">":
+                        destFile.write("\tble $" + str(tokens[1]) + " " + str(tokens[3]) + " if_" + str(labCount) + "\n")
+                    elif operator == ">=":
+                        destFile.write("\tblt $" + str(tokens[1]) + " " + str(tokens[3]) + " if_" + str(labCount) + "\n")
+                    elif operator == "<":
+                        destFile.write("\tbge $" + str(tokens[1]) + " " + str(tokens[3]) + " if_" + str(labCount) + "\n")
+                    elif operator == "<=":
+                        destFile.write("\tbgt $" + str(tokens[1]) + " " + str(tokens[3]) + " if_" + str(labCount) + "\n")
+                    labCount += 1
 
                 elif tokens[0] == "end" and len(tokens) == 1:
 
                     destFile.write(str(labelStack.pop(0)) + ":\n")
 
+
+                elif tokens[0] == "jump" and len(tokens) == 2:
+
+                    destFile.write("\tj _" + str(tokens[1]) + "\n")
+
+
+                elif tokens[0] == "label" and len(tokens) == 2:
+
+                    destFile.write("_" + str(tokens[1]) + "_:\n")
 
 
     return 1
