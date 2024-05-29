@@ -68,7 +68,7 @@ def run(sourceFile):
                 varDict[str(tokens[1])] = "int"
                 regDict[str(tokens[1])] = ""
 
-                destFile.write("\t" + str(tokens[1]) + ": .word " + " " + str(tokens[3]) + "\n")
+                destFile.write("\t" + str(tokens[1]) + ": .word " + " " + str(tokens[3]))
 
             elif tokens[0] == "array" and len(tokens) >= 4: #int assignment
                 varDict[str(tokens[1])] = "array"
@@ -408,5 +408,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
