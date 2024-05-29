@@ -108,8 +108,6 @@ def run(sourceFile):
 
                 if tokens[0] == "program":
                     #program
-                    destFile.write("\tj main\n") #Jump to main function
-                    #Must write main in the program as a label
                     pass
 
 
