@@ -108,6 +108,8 @@ def run(sourceFile):
 
                 if tokens[0] == "program":
                     #program
+                    destFile.write("\tj main\n") #Jump to main function
+                    #Must write main in the program as a label
                     pass
 
 
@@ -288,7 +290,7 @@ def run(sourceFile):
                     knownFunctions[tokens[1]] = tokens[1]
 
                     counterReg = 0
-                    destFile.write("\tfunc_" + str(tokens[0]) + ":\n") #Function label
+                    destFile.write("func_" + str(tokens[0]) + ":\n") #Function label
                     for reg in allowedReg:
 
                         destFile.write("\taddi $" + str(reg) + " $0 " + str(counterReg) +"($sp)\n")
