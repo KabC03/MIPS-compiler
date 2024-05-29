@@ -115,21 +115,21 @@ def run(sourceFile):
                     #if x == y
                     #Note - load value into reg before use - can only compare vars not vals
 
-                    if tokens[1] in varDict and tokens[3] in varDict:
+                    if tokens[1] in regDict and tokens[3] in regDict:
                         operator = tokens[2]
                         labelStack.insert(0,"if_" + str(labCount))
                         if operator == "==":
-                            destFile.write("\tbne $" + str(varDict[tokens[1]]) + " " + str(varDict[tokens[3]]) + " if_" + str(labCount) + "\n")
+                            destFile.write("\tbne $" + str(regDict[tokens[1]]) + " " + str(regDict[tokens[3]]) + " if_" + str(labCount) + "\n")
                         elif operator == "!=":
-                            destFile.write("\tbeq $" + str(varDict[tokens[1]]) + " " + str(varDict[tokens[3]]) + " if_" + str(labCount) + "\n")
+                            destFile.write("\tbeq $" + str(regDict[tokens[1]]) + " " + str(regDict[tokens[3]]) + " if_" + str(labCount) + "\n")
                         elif operator == ">":
-                            destFile.write("\tble $" + str(varDict[tokens[1]]) + " " + str(varDict[tokens[3]]) + " if_" + str(labCount) + "\n")
+                            destFile.write("\tble $" + str(regDict[tokens[1]]) + " " + str(regDict[tokens[3]]) + " if_" + str(labCount) + "\n")
                         elif operator == ">=":
-                            destFile.write("\tblt $" + str(varDict[tokens[1]]) + " " + str(varDict[tokens[3]]) + " if_" + str(labCount) + "\n")
+                            destFile.write("\tblt $" + str(regDict[tokens[1]]) + " " + str(regDict[tokens[3]]) + " if_" + str(labCount) + "\n")
                         elif operator == "<":
-                            destFile.write("\tbge $" + str(varDict[tokens[1]]) + " " + str(varDict[tokens[3]]) + " if_" + str(labCount) + "\n")
+                            destFile.write("\tbge $" + str(regDict[tokens[1]]) + " " + str(regDict[tokens[3]]) + " if_" + str(labCount) + "\n")
                         elif operator == "<=":
-                            destFile.write("\tbgt $" + str(varDict[tokens[1]]) + " " + str(varDict[tokens[3]]) + " if_" + str(labCount) + "\n")
+                            destFile.write("\tbgt $" + str(regDict[tokens[1]]) + " " + str(regDict[tokens[3]]) + " if_" + str(labCount) + "\n")
                         labCount += 1
                     else:
                         print("Unknown variable: " + str(tokens))
