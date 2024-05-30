@@ -86,6 +86,13 @@ def run(sourceFile):
                 destFile.write(".text\n")
                 declareVars = False
 
+
+
+            elif tokens[0] == "#" and len(tokens) > 1:
+                # Comment
+                destFile.write(str(line))
+                continue
+                
             elif declareVars == True:
                 print("Unexpected: " + str(line) + "")
                 return None
@@ -391,15 +398,6 @@ def run(sourceFile):
 
                     pass
 
-
-                elif tokens[0] == "#" and len(tokens) > 1:
-                    # Comment
-                    destFile.write(str(line)) 
-                
-
-                    
-                    
-                        
 
 
 
