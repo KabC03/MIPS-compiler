@@ -203,7 +203,8 @@ def run(sourceFile):
                         if indexVariable not in varDict:
                             print("Unknown variable: " + str(indexVariable))
                             return None
-                        
+
+
                         destFile.write("\tsll $" + str(memReg) + " $"+ str(regDict[indexVariable]) + " "+ str(int(math.log2(wordSize))) + "\n")
                         destFile.write("\tadd $" + str(memReg) + " $"+ str(memReg) + " $"+ str(regDict[arrayDefine[0]]) + "\n")
 
@@ -222,6 +223,7 @@ def run(sourceFile):
 
                             if tokens[token][0] in varDict and varDict[tokens[token][0]] == "array":
                                 #notes - can only use ONE variable, cant load immediate offset, program multiplies for you
+
                                 arrIndex = tokens[token][1][0:-1]
                                 
                                 if arrIndex in varDict:
@@ -229,8 +231,11 @@ def run(sourceFile):
 
 
 
+                                    #Issue here
 
-                                    destFile.write("\tsll $" + str(indexHold) + " $"+ str(regDict[tokens[token][0]]) + " "+ str(int(math.log2(wordSize))) + "\n")
+                                    #print("\tsll $" + str(indexHold) + " $"+ str(regDict[tokens[token][0]]) + " "+ str(int(math.log2(wordSize))) + "\n")
+                                    #print("\tsll $" + str(indexHold) + " $"+ str(regDict[arrIndex]) + " "+ str(int(math.log2(wordSize))) + "\n")
+                                    destFile.write("\tsll $" + str(indexHold) + " $"+ str(regDict[arrIndex]) + " "+ str(int(math.log2(wordSize))) + "\n")
                                     destFile.write("\tadd $" + str(indexHold) + " $"+ str(indexHold) + " $"+ str(regDict[arrIndex]) + "\n")
                                     
                                     
