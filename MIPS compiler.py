@@ -416,7 +416,7 @@ def main():
 
 
     stopTime = time.time()
-    print("Successfully compiled in: " + str((stopTime - startTime)*1000) + "ms\n") 
+    print("Compiled in: " + str((stopTime - startTime)*1000) + "ms\n") 
 
 
 
