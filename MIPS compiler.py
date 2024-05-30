@@ -60,7 +60,7 @@ def run(sourceFile):
                 continue
 
             destFile.write("\n")
-            if debug == True:
+            if debug == True and tokens[0] != "#":
                 destFile.write("\t\t# " + str(line))
 
 
@@ -392,8 +392,10 @@ def run(sourceFile):
                     pass
 
 
-
-                        
+                elif tokens[0] == "#" and len(tokens) > 1:
+                    # Comment
+                    destFile.write(str(line)) 
+                
 
                     
                     
