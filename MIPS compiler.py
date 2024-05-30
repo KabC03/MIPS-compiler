@@ -157,7 +157,7 @@ def run(sourceFile):
                 elif tokens[0] == "jump" and len(tokens) == 2:
                     #jump lol
 
-                    destFile.write("\tj _" + str(tokens[1]) + "\n")
+                    destFile.write("\tj _" + str(tokens[1]) + "_\n")
 
 
                 elif tokens[0] == "label" and len(tokens) == 2:
