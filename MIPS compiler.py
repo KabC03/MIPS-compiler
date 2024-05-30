@@ -50,6 +50,12 @@ def run(sourceFile):
     with open(destFileName, 'w') as destFile:
         destFile.write(".data\n")
 
+
+        destFile.write("\t" + str("ARG1") + ": .word " + " " + str(4) + "\n")
+        destFile.write("\t" + str("ARG2") + ": .word " + " " + str(5) + "\n")
+        destFile.write("\t" + str("ARG3") + ": .word " + " " + str(6) + "\n")
+        destFile.write("\t" + str("ARG4") + ": .word " + " " + str(7) + "\n")
+
         for line in sourceFile:
             tokens = []
             tokens = line.split() #Split by whitespace
@@ -101,6 +107,7 @@ def run(sourceFile):
             if declareVars == False:
 
                 if firstRun == True: #Load variables into registers
+
 
                     regIndex = allowedReg[0]
                     for key in varDict:
