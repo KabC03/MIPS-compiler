@@ -201,7 +201,7 @@ def run(sourceFile):
                             tokens[token] = tokens[token].split("[")
 
                             if tokens[token][0] in varDict and varDict[tokens[token][0]] == "array":
-                                #notes - can only use ONE variable, cant load immediate offset, must multiply address yourself (x * 4)
+                                #notes - can only use ONE variable, cant load immediate offset, program multiplies for you
                                 arrIndex = tokens[token][1][0:-1]
                                 
                                 if arrIndex in varDict:
