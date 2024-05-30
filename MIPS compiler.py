@@ -1,4 +1,5 @@
 import time
+import math
 
 
 reservedWords = ["int", "array", "var", "if", "end","jump", "label", "func", "return", "call", "", "program"]
@@ -60,7 +61,7 @@ def run(sourceFile):
 
             destFile.write("\n")
             if debug == True:
-                destFile.write("\t\t# " + str(tokens) + "\n")
+                destFile.write("\t\t# " + str(line))
 
 
             #int x = 10
@@ -183,8 +184,8 @@ def run(sourceFile):
                             print("Unknown variable: " + str(indexVariable))
                             return None
                         
-
-                        destFile.write("\tadd $" + str(memReg) + " $"+ str(regDict[indexVariable]) + " $"+ str(regDict[arrayDefine[0]]) + "\n")
+                        destFile.write("\tsll $" + str(memReg) + " $"+ str(regDict[indexVariable]) + " "+ str(int(math.log2(wordSize))) + "\n")
+                        destFile.write("\tadd $" + str(memReg) + " $"+ str(memReg) + " $"+ str(regDict[arrayDefine[0]]) + "\n")
 
 
                     destFile.write("\tli $" + str(ALUaccumulator) + " 0" + "\n")
@@ -205,7 +206,20 @@ def run(sourceFile):
                                 
                                 if arrIndex in varDict:
                                     #MEMORY ADDRESS
-                                    destFile.write("\tadd $" + str(indexHold) + " $"+ str(regDict[tokens[token][0]]) + " $"+ str(regDict[arrIndex]) + "\n")
+
+
+
+
+                                    destFile.write("\tsll $" + str(indexHold) + " $"+ str(regDict[tokens[token][0]]) + " "+ str(int(math.log2(wordSize))) + "\n")
+                                    destFile.write("\tadd $" + str(indexHold) + " $"+ str(indexHold) + " $"+ str(regDict[arrIndex]) + "\n")
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    #destFile.write("\tadd $" + str(indexHold) + " $"+ str(regDict[tokens[token][0]]) + " $"+ str(regDict[arrIndex]) + "\n")
                                     destFile.write("\tlw $" + str(indexHold) + " 0($"+ str(indexHold) + ")\n")
 
                                     if prevOp == "+":
