@@ -11,7 +11,7 @@ memReg = 22 #Array defining
 wordSize = 4 #4 bytes
 
 
-debug = False #Enable for debug in the assembly output
+debug = True #Enable for debug in the assembly output
 
 
 
