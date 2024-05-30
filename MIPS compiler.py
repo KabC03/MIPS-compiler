@@ -21,6 +21,7 @@ def run(sourceFile):
 
     varDict = {
 
+        "ZERO" : "int",
         "ARG1" : "int",
         "ARG2" : "int",
         "ARG3" : "array",
@@ -31,6 +32,7 @@ def run(sourceFile):
 
     regDict = {
 
+        "ZERO" : "0",
         "ARG1" : "4",
         "ARG2" : "5",
         "ARG3" : "6",
@@ -112,20 +114,25 @@ def run(sourceFile):
                     regIndex = allowedReg[0]
                     for key in varDict:
                         
-                        if regIndex > allowedReg[-1] + 4: #add 4 to make sure ARGX is not counted, stored in V registers only
-                            print("Out of registers")
-                            return None
-
-
-                        if varDict[key] == "array":
-                            destFile.write("\tla $" + str(regIndex) + " " + str(key) + "\n")
+                        if key == "ZERO":
+                            pass
 
                         else:
-                            destFile.write("\tlw $" + str(regIndex) + " " + str(key) + "\n")
+                            if regIndex > allowedReg[-1] + 5: #add 4 to make sure ARGX is not counted, stored in V registers only
+                                print("Out of registers")
+                                return None
 
-                        regDict[key] = regIndex
+                            if varDict[key] == "array":
+                                destFile.write("\tla $" + str(regIndex) + " " + str(key) + "\n")
 
-                        regIndex+=1
+                            else:
+                                destFile.write("\tlw $" + str(regIndex) + " " + str(key) + "\n")
+
+                            regDict[key] = regIndex
+
+                            regIndex+=1
+
+
                     firstRun = False
 
                 if tokens[0] == "program":
