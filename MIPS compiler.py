@@ -7,6 +7,7 @@ allowedReg = list(range(8,15))
 ALUaccumulator = 25 #Register 25 holds accumulator vals
 ALUHold = 24 #For division and multuolication
 indexHold = 23 #array indexing
+memReg = 22 #Array defining
 wordSize = 4 #4 bytes
 
 
@@ -163,10 +164,29 @@ def run(sourceFile):
                     destination = tokens[1]
                     prevOp = "+"
 
-                    if destination not in varDict: #Variable needs to be defined
+                
+                    isArrayAri = False
+
+                    arrayDefine = destination.split("[")
+                    #print(arrayDefine)
+
+                    if destination not in varDict and len(arrayDefine) == 0: #Variable needs to be defined
                         print("Unknown variable: " + str(tokens[1]))
                         return None
-                    
+
+
+                    if varDict[arrayDefine[0]] == "array":
+                        isArrayAri = True
+                        indexVariable = arrayDefine[1][:-1]
+                        
+                        if indexVariable not in varDict:
+                            print("Unknown variable: " + str(indexVariable))
+                            return None
+                        
+
+                        destFile.write("\tadd $" + str(memReg) + " $"+ str(regDict[indexVariable]) + " $"+ str(regDict[arrayDefine[0]]) + "\n")
+
+
                     destFile.write("\tli $" + str(ALUaccumulator) + " 0" + "\n")
                     for token in range(3,len(tokens)):
                         if tokens[token] in reservedSymbols: #Symbol deteced
@@ -261,7 +281,14 @@ def run(sourceFile):
                                     destFile.write("\taddi $" + str(ALUHold) + " $0 " + str(tokens[token]) + "\n")
                                     destFile.write("\tdiv $" + str(ALUaccumulator) + " $" + str(ALUaccumulator) + " $" + str(ALUHold) + "\n")
                                     destFile.write("\tmfhi $" + str(ALUaccumulator) + "\n")
-                    destFile.write("\taddi $" + str(regDict[tokens[1]]) + " $0 $" + str(ALUaccumulator) + "\n")
+
+
+
+                    if isArrayAri == True:
+                        destFile.write("\tsw $" + str(ALUaccumulator) + " 0($" + str(memReg) + ")\n")
+                        pass
+                    else:
+                        destFile.write("\taddi $" + str(regDict[tokens[1]]) + " $0 $" + str(ALUaccumulator) + "\n")
                     destFile.write("\n")
 
 
@@ -398,21 +425,21 @@ def run(sourceFile):
 
 def main():
     startTime = time.time()
-    sourceFileName = input("Source file: ")
+    #sourceFileName = input("Source file: ")
     sourceFileName = "source.txt"
 
-    #with open(sourceFileName, 'r') as sourceFile:
-    #    if run(sourceFile) == None:
-    #        print("Failed compilation")
+    with open(sourceFileName, 'r') as sourceFile:
+        if run(sourceFile) == None:
+            print("Failed compilation")
 
-    try:
+    #try:
 
-        with open(sourceFileName, 'r') as sourceFile:
-            if run(sourceFile) == None:
-                print("Failed compilation")
+    #    with open(sourceFileName, 'r') as sourceFile:
+    #        if run(sourceFile) == None:
+    #            print("Failed compilation")
 
-    except:
-        print("Failed to open source file: " + str(sourceFileName))   
+    #except:
+    #    print("Failed to open source file: " + str(sourceFileName))   
 
 
     stopTime = time.time()
