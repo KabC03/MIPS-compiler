@@ -116,7 +116,13 @@ def run(sourceFile):
                             print("Out of registers")
                             return None
 
-                        destFile.write("\tlw $" + str(regIndex) + " " + str(key) + "\n")
+
+                        if varDict[key] == "array":
+                            destFile.write("\tla $" + str(regIndex) + " " + str(key) + "\n")
+
+                        else:
+                            destFile.write("\tlw $" + str(regIndex) + " " + str(key) + "\n")
+
                         regDict[key] = regIndex
 
                         regIndex+=1
@@ -316,7 +322,7 @@ def run(sourceFile):
                         destFile.write("\tsw $" + str(ALUaccumulator) + " 0($" + str(memReg) + ")\n")
                         pass
                     else:
-                        destFile.write("\taddi $" + str(regDict[tokens[1]]) + " $0 $" + str(ALUaccumulator) + "\n")
+                        destFile.write("\tadd $" + str(regDict[tokens[1]]) + " $0 $" + str(ALUaccumulator) + "\n")
                     destFile.write("\n")
 
 
