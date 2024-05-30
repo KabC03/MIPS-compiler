@@ -261,6 +261,7 @@ def run(sourceFile):
                                     destFile.write("\taddi $" + str(ALUHold) + " $0 " + str(tokens[token]) + "\n")
                                     destFile.write("\tdiv $" + str(ALUaccumulator) + " $" + str(ALUaccumulator) + " $" + str(ALUHold) + "\n")
                                     destFile.write("\tmfhi $" + str(ALUaccumulator) + "\n")
+                    destFile.write("\taddi $" + str(regDict[tokens[1]]) + " $0 $" + str(ALUaccumulator) + "\n")
                     destFile.write("\n")
 
 
