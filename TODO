@@ -1,7 +1,3 @@
-Array assignment
-arr[x] = 10
 
-
-Basically just load the memory address into memReg do the calculation and then sw $memad $aluaccululator if its an array
-
-
+Fix indexing, something with sll is wrong
+Also using addi when just add should be used
