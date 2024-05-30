@@ -235,8 +235,11 @@ def run(sourceFile):
 
                                     #print("\tsll $" + str(indexHold) + " $"+ str(regDict[tokens[token][0]]) + " "+ str(int(math.log2(wordSize))) + "\n")
                                     #print("\tsll $" + str(indexHold) + " $"+ str(regDict[arrIndex]) + " "+ str(int(math.log2(wordSize))) + "\n")
+                                    
                                     destFile.write("\tsll $" + str(indexHold) + " $"+ str(regDict[arrIndex]) + " "+ str(int(math.log2(wordSize))) + "\n")
-                                    destFile.write("\tadd $" + str(indexHold) + " $"+ str(indexHold) + " $"+ str(regDict[arrIndex]) + "\n")
+
+                                    #print("\tadd $" + str(indexHold) + " $"+ str(indexHold) + " $"+ str(regDict[arrIndex]) + "\n")
+                                    destFile.write("\tadd $" + str(indexHold) + " $"+ str(indexHold) + " $"+ str(regDict[tokens[token][0]]) + "\n")
                                     
                                     
                                     
@@ -245,7 +248,7 @@ def run(sourceFile):
                                     
                                     
                                     #destFile.write("\tadd $" + str(indexHold) + " $"+ str(regDict[tokens[token][0]]) + " $"+ str(regDict[arrIndex]) + "\n")
-                                    destFile.write("\tla $" + str(indexHold) + " 0($"+ str(indexHold) + ")\n")
+                                    destFile.write("\tlw $" + str(indexHold) + " 0($"+ str(indexHold) + ")\n")
 
                                     if prevOp == "+":
                                         destFile.write("\tadd $" + str(ALUaccumulator) + " $"+ str(ALUaccumulator) + " $"+ str(indexHold) + "\n")
