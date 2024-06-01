@@ -263,7 +263,7 @@ def run(sourceFile):
                                     elif prevOp == "-":
                                         destFile.write("\tsub $" + str(ALUaccumulator) + " $"+ str(ALUaccumulator) + " $"+ str(indexHold) + "\n")
                                     if prevOp == "*":
-                                        destFile.write("\tmul $" + str(ALUaccumulator) + " $"+ str(indexHold) + "\n")
+                                        destFile.write("\tmult $" + str(ALUaccumulator) + " $"+ str(indexHold) + "\n")
                                         destFile.write("\tmflo $" + str(ALUaccumulator) + "\n")
                                         ##destFile.write("\tadd $" + str(ALUaccumulator) + " $"+ str(ALUaccumulator) + " $"+ str(ALUaccumulator) + "\n")
 
@@ -293,7 +293,7 @@ def run(sourceFile):
                             elif prevOp == "-":
                                 destFile.write("\tsub $" + str(ALUaccumulator) + " $"+ str(ALUaccumulator) + " $"+ str(regDict[tokens[token]]) + "\n")
                             if prevOp == "*":
-                                destFile.write("\tmul $" + str(ALUaccumulator) + " $"+ str(regDict[tokens[token]]) + "\n")
+                                destFile.write("\tmult $" + str(ALUaccumulator) + " $"+ str(regDict[tokens[token]]) + "\n")
                                 destFile.write("\tmflo $" + str(ALUaccumulator) + "\n")
                                 ##destFile.write("\tadd $" + str(ALUaccumulator) + " $"+ str(ALUaccumulator) + " $"+ str(ALUaccumulator) + "\n")
                             elif prevOp == "/":
@@ -327,7 +327,7 @@ def run(sourceFile):
                                     
                                 if prevOp == "*":
                                     destFile.write("\taddi $" + str(ALUHold) + " $0 " + str(tokens[token]) + "\n")
-                                    destFile.write("\tmul  $" + str(ALUaccumulator) + " $" + str(ALUHold) + "\n")
+                                    destFile.write("\tmult  $" + str(ALUaccumulator) + " $" + str(ALUHold) + "\n")
                                     destFile.write("\tmflo $" + str(ALUaccumulator) + "\n")
                                     #destFile.write("\tadd $" + str(ALUaccumulator) + " $"+ str(ALUaccumulator) + " $"+ str(ALUaccumulator) + "\n")
                                 elif prevOp == "/":
