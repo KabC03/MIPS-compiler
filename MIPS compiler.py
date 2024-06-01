@@ -163,6 +163,7 @@ def run(sourceFile):
                         labCount += 1
                     else:
                         print("Unknown variable: " + str(tokens))
+                        return None
 
 
 
