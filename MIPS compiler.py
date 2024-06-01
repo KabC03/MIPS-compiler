@@ -327,7 +327,7 @@ def run(sourceFile):
                                     
                                 if prevOp == "*":
                                     destFile.write("\taddi $" + str(ALUHold) + " $0 " + str(tokens[token]) + "\n")
-                                    destFile.write("\tmul " + str(ALUaccumulator) + " $" + str(ALUHold) + "\n")
+                                    destFile.write("\tmul  $" + str(ALUaccumulator) + " $" + str(ALUHold) + "\n")
                                     destFile.write("\tmflo $" + str(ALUaccumulator) + "\n")
                                     #destFile.write("\tadd $" + str(ALUaccumulator) + " $"+ str(ALUaccumulator) + " $"+ str(ALUaccumulator) + "\n")
                                 elif prevOp == "/":
